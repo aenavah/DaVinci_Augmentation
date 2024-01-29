@@ -28,7 +28,7 @@ def create_output_folders(target_path, seed_list):
         with open(folder_path + "/" + "s" + str(seed) + "/" + "info.txt", "w") as file:
           file.write("s" + str(seed) + " has value: " + str(seed))
 
-def crop_image(img_folder, original_size, crop_dims, newsize):
+def crop_resize_image(img_folder, original_size, crop_dims, newsize):
   remove_updown, remove_leftright = crop_dims
   output_folder = img_folder.replace(image_folder_root, cropped_images_root)
   print(output_folder)
@@ -42,7 +42,6 @@ def crop_image(img_folder, original_size, crop_dims, newsize):
         img_cropped_resized = img_cropped.resize(newsize)
         cropped_img_name = output_folder + "/cropped_" + img_name
         img_cropped_resized.save(cropped_img_name)
-        #crop lights 
 
 
 if __name__ == "__main__":
@@ -52,7 +51,7 @@ if __name__ == "__main__":
   cropped_images_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Cropped Images"
   patch_images_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Patch Images"
   augm_folder_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Augmented Images"
-  seed_list = [0, 1]
+  seed_list = [0, 1] #testing, update later 
 
   ####### to change criteria:
   original = (5344, 4012)
@@ -74,16 +73,15 @@ if __name__ == "__main__":
     pass
 
   input_image_folders = subbest_dirs(image_folder_root)
+
+  #call cropping function for each image in input_folder >> cropped_output_folder
   for img_folder in input_image_folders:
-    crop_image(img_folder, original, crop_dims, newsize)
-    break 
+    crop_resize_image(img_folder, original, crop_dims, newsize)
 
-    #call cropping function for each image in input_folder
-    #output images to cropped_output_folder
-
+    #Next: 
     #read in cropped images folder, 
     #call subbiestdir for cropped images
     #for each image in dir in subbiestdir:
-      #call patching fcn and output to patch folder with naming "qx_img8383.jpg"
+      #call patching fcn and output to patch folder with naming "quadx_oldimgname.jpg"
  
 
