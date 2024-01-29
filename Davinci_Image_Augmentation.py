@@ -1,11 +1,7 @@
-
-import cv2
 import os 
 import os.path 
-import numpy
 import pandas as pd
 from PIL import Image
-import shutil
 
 
 #functions to initialize output directory
@@ -32,30 +28,55 @@ def create_output_folders(target_path, seed_list):
         with open(folder_path + "/" + "s" + str(seed) + "/" + "info.txt", "w") as file:
           file.write("s" + str(seed) + " has value: " + str(seed))
 
+def crop_image(img_folder, original_size, crop_dims, newsize):
+  remove_updown, remove_leftright = crop_dims
+  output_folder = img_folder.replace(image_folder_root, cropped_images_root)
+  print(output_folder)
+  crop_box = (remove_leftright, remove_updown, original_size[0] - remove_leftright, original_size[1] - remove_updown) #left and upper, right and lower #og dimnsions: 5344 × 4012 
+  
+  for img_name in os.listdir(img_folder):
+    img_path = os.path.join(img_folder, img_name)
+    if ".jpg" in str(img_path):
+      with Image.open(img_path) as img:
+        img_cropped = img.crop(crop_box)
+        img_cropped_resized = img_cropped.resize(newsize)
+        cropped_img_name = output_folder + "/cropped_" + img_name
+        img_cropped_resized.save(cropped_img_name)
+        #crop lights 
+
+
 if __name__ == "__main__":
+  #required inputs 
+  global image_folder_root, cropped_images_root, patch_images_root 
   image_folder_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Test Images"
   cropped_images_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Cropped Images"
   patch_images_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Patch Images"
-  output_folder_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Augmented Images"
+  augm_folder_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Augmented Images"
   seed_list = [0, 1]
+
+  ####### to change criteria:
+  original = (5344, 4012)
+  crop_dims = (775, 1250) #remove from topbottom, remove from leftright
+  newsize = (512, 512)
+  ###
+
 
   print("Running...")
   #Creates directory for outputs if they don't exist
-  if not os.path.exists(output_folder_root):
-    for path in [cropped_images_root, patch_images_root, output_folder_root]:
+  if not os.path.exists(augm_folder_root):
+    for path in [cropped_images_root, patch_images_root, augm_folder_root]:
       os.makedirs(path)
       copy_directories(path)
-    output_image_folder = subbest_dirs(output_folder_root) #get lowest directories in output folder
+    output_image_folder = subbest_dirs(augm_folder_root) #get lowest directories in output folder
     for folder in output_image_folder:
       create_output_folders(folder, seed_list) #make folders patch, full, and seeds at lowest dir
   else:
     pass
 
   input_image_folders = subbest_dirs(image_folder_root)
-  for input_folder in input_image_folders:
-    cropped_output_folder = input_folder.replace(image_folder_root, cropped_images_root) + "/" #goes in corresponding output folder, but not in path or full folder yet 
-
-
+  for img_folder in input_image_folders:
+    crop_image(img_folder, original, crop_dims, newsize)
+    break 
 
     #call cropping function for each image in input_folder
     #output images to cropped_output_folder
