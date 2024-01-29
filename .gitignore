@@ -1,0 +1,12 @@
+#ignore private data
+*.csv
+*.xlsx
+*.zip
+
+
+#ignore Archive folder
+Archive
+
+#ignore images (for now)
+*.jpg
+*.img 
