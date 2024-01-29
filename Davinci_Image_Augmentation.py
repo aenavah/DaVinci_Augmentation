@@ -9,7 +9,7 @@ import shutil
 
 
 #functions to initialize output directory
-def subbest_dirs(root_dir): #might just read in count csv instead of doing this, when patch folders are already made it looks in those
+def subbest_dirs(root_dir):
   subs = []
   for root, dirs, files in os.walk(root_dir):
     if not dirs:
@@ -32,29 +32,37 @@ def create_output_folders(target_path, seed_list):
         with open(folder_path + "/" + "s" + str(seed) + "/" + "info.txt", "w") as file:
           file.write("s" + str(seed) + " has value: " + str(seed))
 
-##
-        
-
-
-
-
 if __name__ == "__main__":
-  image_folder = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Test Images"
-  output_folder = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Augmented Images"
+  image_folder_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Test Images"
+  cropped_images_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Cropped Images"
+  patch_images_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Patch Images"
+  output_folder_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Augmented Images"
   seed_list = [0, 1]
 
   print("Running...")
-  #Creates directory for output if it doesnt exists 
-  if not os.path.exists(output_folder):
-    os.makedirs(output_folder)
-    print("Created folder Augmented Images in " + output_folder)
-    copy_directories(image_folder, output_folder) #copy directory tree to output folder
-    image_folder = subbest_dirs(output_folder) #get lowest directories in output folder
-    for folder in image_folder:
-      create_output_folders(folder, seed_list) #make folders patch, full, and seeds inside 
+  #Creates directory for outputs if they don't exist
+  if not os.path.exists(output_folder_root):
+    for path in [cropped_images_root, patch_images_root, output_folder_root]:
+      os.makedirs(path)
+      copy_directories(path)
+    output_image_folder = subbest_dirs(output_folder_root) #get lowest directories in output folder
+    for folder in output_image_folder:
+      create_output_folders(folder, seed_list) #make folders patch, full, and seeds at lowest dir
   else:
-    print("Output folder Augmented Images already exists...")
+    pass
 
-  
+  input_image_folders = subbest_dirs(image_folder_root)
+  for input_folder in input_image_folders:
+    cropped_output_folder = input_folder.replace(image_folder_root, cropped_images_root) + "/" #goes in corresponding output folder, but not in path or full folder yet 
 
+
+
+    #call cropping function for each image in input_folder
+    #output images to cropped_output_folder
+
+    #read in cropped images folder, 
+    #call subbiestdir for cropped images
+    #for each image in dir in subbiestdir:
+      #call patching fcn and output to patch folder with naming "qx_img8383.jpg"
+ 
 
