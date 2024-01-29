@@ -6,6 +6,7 @@
 
 #ignore Archive folder
 Archive
+.DS_Store
 
 #ignore images (for now)
 *.jpg

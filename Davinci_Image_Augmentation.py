@@ -54,9 +54,9 @@ if __name__ == "__main__":
   seed_list = [0, 1] #testing, update later 
 
   ####### to change criteria:
-  original = (5344, 4012)
+  original = (5344, 4012) #size of original images
   crop_dims = (775, 1250) #remove from topbottom, remove from leftright
-  newsize = (512, 512)
+  newsize = (512, 512) #resize dims for cropped imgs 
   ###
 
 
