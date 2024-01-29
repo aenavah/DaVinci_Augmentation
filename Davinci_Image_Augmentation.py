@@ -50,7 +50,7 @@ def make_patches(img_folder):
       width, height = img.size
       half_width, half_height = width // 2, height // 2
       quadrants = [(0, 0, half_width, half_height),(half_width, 0, width, half_height),(0, half_height, half_width, height),(half_width, half_height, width, height)]
-      
+      ### cont from here 
   
 
 if __name__ == "__main__":
