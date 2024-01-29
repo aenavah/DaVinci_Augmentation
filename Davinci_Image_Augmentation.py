@@ -43,9 +43,18 @@ def crop_resize_image(img_folder, original_size, crop_dims, newsize):
         cropped_img_name = output_folder + "/cropped_" + img_name
         img_cropped_resized.save(cropped_img_name)
 
+def make_patches(img_folder):
+  for img_name in os.listdir(img_folder):
+    img_path = os.path.join(img_folder, img_name)
+    with Image.open(img_path) as img:
+      width, height = img.size
+      half_width, half_height = width // 2, height // 2
+      quadrants = [(0, 0, half_width, half_height),(half_width, 0, width, half_height),(0, half_height, half_width, height),(half_width, half_height, width, height)]
+      
+  
 
 if __name__ == "__main__":
-  #required inputs 
+  #-------------------------required inputs-------------------------
   global image_folder_root, cropped_images_root, patch_images_root 
   image_folder_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Test Images"
   cropped_images_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Cropped Images"
@@ -57,6 +66,8 @@ if __name__ == "__main__":
   original = (5344, 4012) #size of original images
   crop_dims = (775, 1250) #remove from topbottom, remove from leftright
   newsize = (512, 512) #resize dims for cropped imgs 
+
+  num_patches = 4
   ###
 
 
@@ -73,14 +84,14 @@ if __name__ == "__main__":
     pass
 
   input_image_folders = subbest_dirs(image_folder_root)
-
   #call cropping function for each image in input_folder >> cropped_output_folder
   for img_folder in input_image_folders:
     crop_resize_image(img_folder, original, crop_dims, newsize)
 
-    #Next: 
-    #read in cropped images folder, 
-    #call subbiestdir for cropped images
+  cropped_images_folder = subbest_dirs(cropped_images_root)
+  for cropped_img_folder in cropped_images_folder:
+    make_patches(cropped_img_folder, num_patches)
+
     #for each image in dir in subbiestdir:
       #call patching fcn and output to patch folder with naming "quadx_oldimgname.jpg"
  
