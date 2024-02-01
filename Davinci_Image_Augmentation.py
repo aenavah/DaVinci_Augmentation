@@ -83,6 +83,7 @@ def apply_blur(input_folder, output_folder, seed):
   for img_name in os.listdir(input_folder):
     img_path = os.path.join(input_folder, img_name)
     with Image.open(img_path) as img:
+      continue
 
 if __name__ == "__main__":
   #-------------------------required inputs-------------------------
