@@ -1,7 +1,7 @@
 import os 
 import os.path 
 import pandas as pd
-from PIL import Image
+from PIL import Image, ImageDraw
 
 
 #functions to initialize output directory
@@ -44,14 +44,40 @@ def crop_resize_image(img_folder, original_size, crop_dims, newsize):
         img_cropped_resized.save(cropped_img_name)
 
 def make_patches(img_folder):
+  output_folder = img_folder.replace(cropped_images_root, patch_images_root)
+  print(output_folder)
+  quit
   for img_name in os.listdir(img_folder):
     img_path = os.path.join(img_folder, img_name)
     with Image.open(img_path) as img:
+      print(img_path)
       width, height = img.size
       half_width, half_height = width // 2, height // 2
-      quadrants = [(0, 0, half_width, half_height),(half_width, 0, width, half_height),(0, half_height, half_width, height),(half_width, half_height, width, height)]
+      #left, top, right, bottom
+      quad_i = (0,0, half_width,half_height) #top_left
+      quad_ii = (half_width, 0, width, half_height) #top_right
+      quad_iii = (half_width, half_height, width, height) #bottom_right
+      quad_iv = (0, half_height, half_width, height) #bottom_left
+      quadrants = [quad_i, quad_ii, quad_iii, quad_iv]
+      for quad in quadrants:
+        if quad == quad_i:
+          quadname = "quadi"
+        if quad == quad_ii:
+          quadname = "quadii"
+        if quad == quad_iii:
+          quadname= "quadiii"
+        if quad == quad_iv:
+          quadname = "quadiv"
+        img_cropped = img.crop(quad)
+        patch_img_name = output_folder + "/" + quadname +"_" + img_name
+
+        #Add quadrant pixels onto image for debugging
+        #draw = ImageDraw.Draw(img_cropped)
+        #draw.text((10, 10), str(quad), fill="white")
+        img_cropped.save(patch_img_name)
       ### cont from here 
-  
+
+
 
 if __name__ == "__main__":
   #-------------------------required inputs-------------------------
@@ -66,8 +92,7 @@ if __name__ == "__main__":
   original = (5344, 4012) #size of original images
   crop_dims = (775, 1250) #remove from topbottom, remove from leftright
   newsize = (512, 512) #resize dims for cropped imgs 
-
-  num_patches = 4
+  run_crop = 0 
   ###
 
 
@@ -83,14 +108,15 @@ if __name__ == "__main__":
   else:
     pass
 
-  input_image_folders = subbest_dirs(image_folder_root)
-  #call cropping function for each image in input_folder >> cropped_output_folder
-  for img_folder in input_image_folders:
-    crop_resize_image(img_folder, original, crop_dims, newsize)
+  if run_crop == 1:
+    input_image_folders = subbest_dirs(image_folder_root)
+    #call cropping function for each image in input_folder >> cropped_output_folder
+    for img_folder in input_image_folders:
+      crop_resize_image(img_folder, original, crop_dims, newsize)
 
   cropped_images_folder = subbest_dirs(cropped_images_root)
   for cropped_img_folder in cropped_images_folder:
-    make_patches(cropped_img_folder, num_patches)
+    make_patches(cropped_img_folder)
 
     #for each image in dir in subbiestdir:
       #call patching fcn and output to patch folder with naming "quadx_oldimgname.jpg"
