@@ -93,6 +93,7 @@ if __name__ == "__main__":
   crop_dims = (775, 1250) #remove from topbottom, remove from leftright
   newsize = (512, 512) #resize dims for cropped imgs 
   run_crop = 0 
+  run_patch = 0
   ###
 
 
@@ -108,17 +109,18 @@ if __name__ == "__main__":
   else:
     pass
 
+  input_image_folders = subbest_dirs(image_folder_root)
   if run_crop == 1:
-    input_image_folders = subbest_dirs(image_folder_root)
     #call cropping function for each image in input_folder >> cropped_output_folder
     for img_folder in input_image_folders:
       crop_resize_image(img_folder, original, crop_dims, newsize)
 
   cropped_images_folder = subbest_dirs(cropped_images_root)
-  for cropped_img_folder in cropped_images_folder:
-    make_patches(cropped_img_folder)
+  if run_patch == 1:
+    for cropped_img_folder in cropped_images_folder:
+      make_patches(cropped_img_folder)
 
-    #for each image in dir in subbiestdir:
-      #call patching fcn and output to patch folder with naming "quadx_oldimgname.jpg"
- 
+#next read in patches images and apply gausblur and save to aug folder
+#read in full images from crop folder and apply gausblur
+  
 
