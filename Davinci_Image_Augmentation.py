@@ -77,7 +77,12 @@ def make_patches(img_folder):
         img_cropped.save(patch_img_name)
       ### cont from here 
 
-
+def apply_blur(input_folder, output_folder, seed):
+  #needs to work for both patch and full 
+  output_folder = input_folder.replace(input_folder, output_folder)
+  for img_name in os.listdir(input_folder):
+    img_path = os.path.join(input_folder, img_name)
+    with Image.open(img_path) as img:
 
 if __name__ == "__main__":
   #-------------------------required inputs-------------------------
