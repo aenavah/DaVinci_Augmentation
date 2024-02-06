@@ -1,8 +1,9 @@
 import os 
 import os.path 
 import pandas as pd
-from PIL import Image, ImageDraw
-
+from PIL import Image, ImageDraw, ImageFilter
+import torch as pt 
+import numpy as np
 
 #functions to initialize output directory
 def subbest_dirs(root_dir):
@@ -45,12 +46,10 @@ def crop_resize_image(img_folder, original_size, crop_dims, newsize):
 
 def make_patches(img_folder):
   output_folder = img_folder.replace(cropped_images_root, patch_images_root)
-  print(output_folder)
-  quit
+  #print(output_folder)
   for img_name in os.listdir(img_folder):
     img_path = os.path.join(img_folder, img_name)
     with Image.open(img_path) as img:
-      print(img_path)
       width, height = img.size
       half_width, half_height = width // 2, height // 2
       #left, top, right, bottom
@@ -77,12 +76,23 @@ def make_patches(img_folder):
         img_cropped.save(patch_img_name)
       ### cont from here 
 
-def apply_blur(input_folder, output_folder, seed):
+def apply_blur(input_root, input_folder, output_root, seed, min_sigma, max_sigma):
   #needs to work for both patch and full 
-  output_folder = input_folder.replace(input_folder, output_folder)
+  np.random.seed(seed)
+  radius = np.random.uniform(min_sigma, max_sigma) #random amount of blur within specified range
+  output_folder = input_folder.replace(input_root, output_root)
+  print("hi------", output_folder)
   for img_name in os.listdir(input_folder):
     img_path = os.path.join(input_folder, img_name)
-    with Image.open(img_path) as img:
+    if ".jpg" in img_path:
+      #print(img_path)
+      with Image.open(img_path) as img:
+        blurred_img = img.filter(ImageFilter.GaussianBlur(radius))
+        print("bye---------", img_name)
+        #blurred_img.show()
+        #blurred_img_name = output_folder + "/" + quadname +"_" + img_name
+
+        break
       continue
 
 if __name__ == "__main__":
@@ -98,8 +108,10 @@ if __name__ == "__main__":
   original = (5344, 4012) #size of original images
   crop_dims = (775, 1250) #remove from topbottom, remove from leftright
   newsize = (512, 512) #resize dims for cropped imgs 
-  run_crop = 0 
-  run_patch = 0
+  run_crop = 0 #0 if cropped exist
+  run_patch = 0 #0 if patches made
+  min_sigma = 4 #min blur
+  max_sigma = 5 #max blur
   ###
 
 
@@ -125,6 +137,9 @@ if __name__ == "__main__":
   if run_patch == 1:
     for cropped_img_folder in cropped_images_folder:
       make_patches(cropped_img_folder)
+
+  for cropped_img_folder in cropped_images_folder:
+    apply_blur(cropped_images_root, cropped_img_folder, augm_folder_root, 0, min_sigma, max_sigma)
 
 #next read in patches images and apply gausblur and save to aug folder
 #read in full images from crop folder and apply gausblur
