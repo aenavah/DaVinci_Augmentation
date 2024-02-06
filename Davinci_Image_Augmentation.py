@@ -80,20 +80,20 @@ def apply_blur(input_root, input_folder, output_root, seed, min_sigma, max_sigma
   #needs to work for both patch and full 
   np.random.seed(seed)
   radius = np.random.uniform(min_sigma, max_sigma) #random amount of blur within specified range
+  if "Patch" in input_root:
+    img_type = "Patch"
+  else: 
+    img_type = "Full"
   output_folder = input_folder.replace(input_root, output_root)
-  print("hi------", output_folder)
   for img_name in os.listdir(input_folder):
     img_path = os.path.join(input_folder, img_name)
     if ".jpg" in img_path:
-      #print(img_path)
       with Image.open(img_path) as img:
         blurred_img = img.filter(ImageFilter.GaussianBlur(radius))
-        print("bye---------", img_name)
-        #blurred_img.show()
-        #blurred_img_name = output_folder + "/" + quadname +"_" + img_name
-
-        break
-      continue
+        blur_img_name = output_folder + "/" + img_type + "/" + "s" + str(seed) + "/" + img_name
+        print(blur_img_name)
+        blurred_img.save(blur_img_name)
+        
 
 if __name__ == "__main__":
   #-------------------------required inputs-------------------------
@@ -138,10 +138,13 @@ if __name__ == "__main__":
     for cropped_img_folder in cropped_images_folder:
       make_patches(cropped_img_folder)
 
+  patch_images_folder = subbest_dirs(patch_images_root)
+  
+  #add this into a for loop that goes through the seed values
+  for patch_img_folder in patch_images_folder:
+    apply_blur(patch_images_root, patch_img_folder, augm_folder_root, 0, min_sigma, max_sigma)
+
   for cropped_img_folder in cropped_images_folder:
     apply_blur(cropped_images_root, cropped_img_folder, augm_folder_root, 0, min_sigma, max_sigma)
 
-#next read in patches images and apply gausblur and save to aug folder
-#read in full images from crop folder and apply gausblur
-  
 
