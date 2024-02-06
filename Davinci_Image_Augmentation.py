@@ -76,7 +76,7 @@ def make_patches(img_folder):
         img_cropped.save(patch_img_name)
       ### cont from here 
 
-def apply_blur(input_root, input_folder, output_root, seed, min_sigma, max_sigma):
+def apply_blur(input_root, input_folder, seed, min_sigma, max_sigma):
   #needs to work for both patch and full 
   np.random.seed(seed)
   radius = np.random.uniform(min_sigma, max_sigma) #random amount of blur within specified range
@@ -84,7 +84,7 @@ def apply_blur(input_root, input_folder, output_root, seed, min_sigma, max_sigma
     img_type = "Patch"
   else: 
     img_type = "Full"
-  output_folder = input_folder.replace(input_root, output_root)
+  output_folder = input_folder.replace(input_root, augm_folder_root)
   for img_name in os.listdir(input_folder):
     img_path = os.path.join(input_folder, img_name)
     if ".jpg" in img_path:
@@ -144,9 +144,9 @@ if __name__ == "__main__":
   patch_images_folder = subbest_dirs(patch_images_root)
   for seed in seed_list:
     for patch_img_folder in patch_images_folder:
-      apply_blur(patch_images_root, patch_img_folder, augm_folder_root, seed, min_sigma, max_sigma)
+      apply_blur(patch_images_root, patch_img_folder, seed, min_sigma, max_sigma)
 
     for cropped_img_folder in cropped_images_folder:
-      apply_blur(cropped_images_root, cropped_img_folder, augm_folder_root, seed, min_sigma, max_sigma)
+      apply_blur(cropped_images_root, cropped_img_folder, seed, min_sigma, max_sigma)
 
 
