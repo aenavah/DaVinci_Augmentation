@@ -92,7 +92,10 @@ def apply_blur(input_root, input_folder, output_root, seed, min_sigma, max_sigma
         blurred_img = img.filter(ImageFilter.GaussianBlur(radius))
         blur_img_name = output_folder + "/" + img_type + "/" + "s" + str(seed) + "/" + img_name
         print(blur_img_name)
+        blurred_img.show()
+        break
         blurred_img.save(blur_img_name)
+        
         
 
 if __name__ == "__main__":
@@ -139,12 +142,11 @@ if __name__ == "__main__":
       make_patches(cropped_img_folder)
 
   patch_images_folder = subbest_dirs(patch_images_root)
-  
-  #add this into a for loop that goes through the seed values
-  for patch_img_folder in patch_images_folder:
-    apply_blur(patch_images_root, patch_img_folder, augm_folder_root, 0, min_sigma, max_sigma)
+  for seed in seed_list:
+    for patch_img_folder in patch_images_folder:
+      apply_blur(patch_images_root, patch_img_folder, augm_folder_root, seed, min_sigma, max_sigma)
 
-  for cropped_img_folder in cropped_images_folder:
-    apply_blur(cropped_images_root, cropped_img_folder, augm_folder_root, 0, min_sigma, max_sigma)
+    for cropped_img_folder in cropped_images_folder:
+      apply_blur(cropped_images_root, cropped_img_folder, augm_folder_root, seed, min_sigma, max_sigma)
 
 
