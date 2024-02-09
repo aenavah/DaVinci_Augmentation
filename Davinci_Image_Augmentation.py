@@ -2,7 +2,6 @@ import os
 import os.path 
 import pandas as pd
 from PIL import Image, ImageDraw, ImageFilter
-import torch as pt 
 import numpy as np
 
 #functions to initialize output directory

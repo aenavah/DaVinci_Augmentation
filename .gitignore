@@ -8,6 +8,4 @@
 Archive
 .DS_Store
 
-#ignore images (for now)
-*.jpg
-*.img 
+
