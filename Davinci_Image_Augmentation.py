@@ -12,6 +12,7 @@ def subbest_dirs(root_dir):
       subs.append(root)
   return subs
 def copy_directories(src, dst):
+    #print("Copying " + src+ " to " + dst)
     os.makedirs(dst, exist_ok=True)
     for item in os.listdir(src):
         source_path = os.path.join(src, item)
@@ -31,7 +32,7 @@ def create_output_folders(target_path, seed_list):
 def crop_resize_image(img_folder, original_size, crop_dims, newsize):
   remove_updown, remove_leftright = crop_dims
   output_folder = img_folder.replace(image_folder_root, cropped_images_root)
-  print(output_folder)
+  #print(output_folder)
   crop_box = (remove_leftright, remove_updown, original_size[0] - remove_leftright, original_size[1] - remove_updown) #left and upper, right and lower #og dimnsions: 5344 × 4012 
   
   for img_name in os.listdir(img_folder):
@@ -90,9 +91,8 @@ def apply_blur(input_root, input_folder, seed, min_sigma, max_sigma):
       with Image.open(img_path) as img:
         blurred_img = img.filter(ImageFilter.GaussianBlur(radius))
         blur_img_name = output_folder + "/" + img_type + "/" + "s" + str(seed) + "/" + img_name
-        print(blur_img_name)
-        blurred_img.show()
-        break
+        #print(blur_img_name)
+        #blurred_img.show()
         blurred_img.save(blur_img_name)
         
         
@@ -100,18 +100,21 @@ def apply_blur(input_root, input_folder, seed, min_sigma, max_sigma):
 if __name__ == "__main__":
   #-------------------------required inputs-------------------------
   global image_folder_root, cropped_images_root, patch_images_root 
-  image_folder_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Test Images"
-  cropped_images_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Cropped Images"
-  patch_images_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Patch Images"
-  augm_folder_root = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/Augmented Images"
-  seed_list = [0, 1] #testing, update later 
+  base = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/DaVinci_Image_Augmentation/"
+  image_folder_root = base + "Test Images"
+  cropped_images_root = base + "Cropped Images"
+  patch_images_root = base + "Patch Images"
+  augm_folder_root = base + "Augmented Images"
+  seed_list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] #testing, update later 
+  #image_folder = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/DaVinci_Image_Augmentation"
+
 
   ####### to change criteria:
   original = (5344, 4012) #size of original images
   crop_dims = (775, 1250) #remove from topbottom, remove from leftright
   newsize = (512, 512) #resize dims for cropped imgs 
-  run_crop = 0 #0 if cropped exist
-  run_patch = 0 #0 if patches made
+  run_crop = 1 #0 if cropped exist
+  run_patch = 1 #0 if patches made
   min_sigma = 4 #min blur
   max_sigma = 5 #max blur
   ###
@@ -121,8 +124,10 @@ if __name__ == "__main__":
   #Creates directory for outputs if they don't exist
   if not os.path.exists(augm_folder_root):
     for path in [cropped_images_root, patch_images_root, augm_folder_root]:
+      print("Copying directories to " + path +" ...")
+
       os.makedirs(path)
-      copy_directories(path)
+      copy_directories(image_folder_root, path)
     output_image_folder = subbest_dirs(augm_folder_root) #get lowest directories in output folder
     for folder in output_image_folder:
       create_output_folders(folder, seed_list) #make folders patch, full, and seeds at lowest dir
@@ -131,16 +136,21 @@ if __name__ == "__main__":
 
   input_image_folders = subbest_dirs(image_folder_root)
   if run_crop == 1:
+    print("Cropping and resizing...")
+
     #call cropping function for each image in input_folder >> cropped_output_folder
     for img_folder in input_image_folders:
       crop_resize_image(img_folder, original, crop_dims, newsize)
 
   cropped_images_folder = subbest_dirs(cropped_images_root)
   if run_patch == 1:
+
     for cropped_img_folder in cropped_images_folder:
       make_patches(cropped_img_folder)
 
   patch_images_folder = subbest_dirs(patch_images_root)
+  print("Patching and augmenting...")
+
   for seed in seed_list:
     for patch_img_folder in patch_images_folder:
       apply_blur(patch_images_root, patch_img_folder, seed, min_sigma, max_sigma)
