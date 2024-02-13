@@ -1,0 +1,1 @@
+s6 has value: 6

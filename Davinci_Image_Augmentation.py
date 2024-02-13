@@ -100,7 +100,7 @@ def apply_blur(input_root, input_folder, seed, min_sigma, max_sigma):
 if __name__ == "__main__":
   #-------------------------required inputs-------------------------
   global image_folder_root, cropped_images_root, patch_images_root 
-  base = "/Users/alexandranava/Desktop/DARPA/Tasks/DaVinci_Augmentation/DaVinci_Image_Augmentation/"
+  base = "/Users/alexandranava/Desktop/DARPA/Tasks/Augmentations/WoundHealing_Device_ImageAugmentation/"
   image_folder_root = base + "Test Images"
   cropped_images_root = base + "Cropped Images"
   patch_images_root = base + "Patch Images"
