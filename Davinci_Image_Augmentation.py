@@ -94,8 +94,7 @@ def apply_blur(input_root, input_folder, seed, min_sigma, max_sigma):
         #print(blur_img_name)
         #blurred_img.show()
         blurred_img.save(blur_img_name)
-        
-        
+               
 
 if __name__ == "__main__":
   #-------------------------required inputs-------------------------

@@ -6,6 +6,9 @@
 
 #ignore Archive folder
 Archive
+
+#idk what this is for :0
+:GIT_TRACE_PACKET=1 
+
+#usual 
 .DS_Store
-
-
