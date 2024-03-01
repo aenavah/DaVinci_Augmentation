@@ -17,7 +17,7 @@ base
 |  |-- Dropbox Structure\...\woundimage.jpg
 ```
 
-## Output Directory Tree
+### Output Directory Tree
 
 ```plaintext
 base
@@ -27,7 +27,9 @@ base
 |-- patch_images_root #image patches
 |-- augm_folder_root
 |  |Dropbox Structure\...\Full
-|  |  |seed folders\
+|  |  |seed folders\"cropped_" + originalname
 |  |Dropbox Structure\...\Patch
-|  |  |seed folders\
+|  |  |seed folders\"quad" + quadrant number + original image name
 ```
+
+quadrant number is an element in (i,ii,iii,iv) starting at top left and going clockwise
