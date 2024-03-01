@@ -10,7 +10,7 @@ $ ./tree-md .
 
 ```plaintext
 Test Images\
-|-- Dropbox Structure\...\... .jpg
+|-- Dropbox Structure\...\woundimage.jpg
 Use same naming and structure from Dropbox so we can easily locate the images in the database
 
 ```
