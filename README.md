@@ -3,9 +3,9 @@
 ## User Inputs:
 
 - base: local git repository path
-- image_folder_root: name of folder with images to run
+- image_folder_root: name of folder with images to run (made by user)
 
-## Directory Tree
+### Directory Tree
 
 Use same naming and structure from Dropbox so we can easily locate the images in the database
 
@@ -17,4 +17,17 @@ base
 |  |-- Dropbox Structure\...\woundimage.jpg
 ```
 
-##Output Directory Tree
+## Output Directory Tree
+
+```plaintext
+base
+|-- image_folder_root\
+|  |-- Dropbox Structure\...\woundimage.jpg
+|-- cropped_images_root #holds images with lights removed
+|-- patch_images_root #image patches
+|-- augm_folder_root
+|  |Dropbox Structure\...\Full
+|  |  |seed folders\
+|  |Dropbox Structure\...\Patch
+|  |  |seed folders\
+```
